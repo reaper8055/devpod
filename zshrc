@@ -19,6 +19,11 @@ plug "lljbash/zsh-renew-tmux-env"
 alias .="builtin source $HOME/.zshrc"
 alias zshrc="nvim $HOME/.zshrc"
 
+function update-zshrc() {
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
+  builtin source $HOME/.zshrc
+}
+
 # fzf_init
 function fzf_init() {
   [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && \
