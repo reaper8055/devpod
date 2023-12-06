@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
 
-sudo apt update && sudo apt dist-upgrade -y
+sudo apt-get update && sudo apt-get dist-upgrade -y
 
 function install_eza() {
   [ -f "$(which eza)" ] && return 0
-  sudo apt update
-  sudo apt install -y gpg
+  sudo apt-get update
+  sudo apt-get install -y gpg
   sudo mkdir -p /etc/apt/keyrings
   wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
   echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
   sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-  sudo apt update
-  sudo apt install -y eza
+  sudo apt-get update
+  sudo apt-get install -y eza
 }
 
 function install_os_deps() {
   [ -f "$(which fzf)" ] && return 0
-  sudo apt install fzf ripgrep
+  sudo apt-get install -y fzf ripgrep
 }
 
 function install_nvim() {
-  sudo apt purge neovim
-  sudo apt install ninja-build gettext cmake unzip curl
+  yes | sudo apt-get remove --purge neovim
+  sudo apt-get install -y ninja-build gettext cmake unzip curl
   [ -d /home/user/neovim ] && rm -rf /home/user/neovim
   git clone https://github.com/neovim/neovim
   cd neovim || exit 1
@@ -35,7 +35,7 @@ function install_nvim() {
 
 function install_starship() {
   [ -f "$(which starship)" ] && return 0
-  curl -sS https://starship.rs/install.sh | sh
+  yes | curl -sS https://starship.rs/install.sh | sh
 }
 
 function init_starship() {
@@ -43,7 +43,7 @@ function init_starship() {
 }
 
 function init_zshrc_config() {
-zap version || zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
 cat > /home/user/jsahu2_zshrc <<EOF
 [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \\
   source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
@@ -95,8 +95,8 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
  --color=marker:#73d0ff,spinner:#73d0ff,header:#d4bfff
  --border'
 EOF
-
-cmp --silent /home/user/jsahu2_zshrc /home/user/.zshrc || mv /home/user/jsahu2_zshrc /home/user/.zshrc
+mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
+mv /home/user/jsahu2_zshrc /home/user/.zshrc
 }
 
 install_eza
