@@ -50,6 +50,8 @@ function install_zap() {
 function init_zshrc() {
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
+  builtin source $HOME/.zshrc
+  yes | zap clean
 }
 
 install_pkgs
