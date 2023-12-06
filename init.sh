@@ -60,4 +60,4 @@ install_fzf
 install_starship
 install_nvim
 install_zap
-init_zshrc()
+init_zshrc
