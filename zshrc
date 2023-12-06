@@ -56,3 +56,5 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
  --color=info:#73d0ff,prompt:#707a8c,pointer:#cbccc6
  --color=marker:#73d0ff,spinner:#73d0ff,header:#d4bfff
  --border'
+
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
