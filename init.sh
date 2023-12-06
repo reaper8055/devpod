@@ -30,7 +30,7 @@ function install_nvim() {
   sudo make install
   cd /home/user/ || exit 1
   [ -d /home/user/neovim ] && rm -rf /home/user/neovim
-  git clone https://github.com/reaper8055/nvim-config /home/user/.config/nvim/
+  [ ! -d /home/user/.config/nvim ] && git clone https://github.com/reaper8055/nvim-config /home/user/.config/nvim/
 }
 
 function install_starship() {
@@ -43,60 +43,9 @@ function init_starship() {
 }
 
 function init_zshrc_config() {
-yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
-cat > /home/user/jsahu2_zshrc <<EOF
-[ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \\
-  source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
-
-#default editor
-export EDITOR=nvim
-
-# Plugins
-plug "hlissner/zsh-autopair"
-plug "zsh-users/zsh-autosuggestions"
-plug "zsh-users/zsh-syntax-highlighting"
-plug "jeffreytse/zsh-vi-mode"
-plug "zap-zsh/supercharge"
-plug "zap-zsh/exa" # this plugin needs to be after zap-zsh/supercharge as per https://github.com/zap-zsh/exa/issues/3
-plug "Aloxaf/fzf-tab"
-plug "zap-zsh/fzf"
-plug "lljbash/zsh-renew-tmux-env"
-
-# fzf_init
-function fzf_init() {
-  [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && \\
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-  [ -f /usr/share/doc/fzf/examples/completion.zsh ] && \\
-    source /usr/share/doc/fzf/examples/completion.zsh
-}
-function autosuggestions_init() {
-  [ -f "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \\
-    source "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-}
-function autopair_init() {
-  [ -f "$HOME/.local/share/zap/plugins/zsh-autopair/autopair.zsh" ] && \\
-    source "$HOME/.local/share/zap/plugins/zsh-autopair/autopair.zsh"
-}
-zvm_after_init_commands+=(
-  fzf_init
-  autopair_init
-  autosuggestions_init
-)
-
-# starship.rs
-export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
-eval "$(starship init zsh)"
-
-# fzf
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
- --color=fg:#cbccc6,bg:#1f2430,hl:#707a8c
- --color=fg+:#707a8c,bg+:#191e2a,hl+:#ffcc66
- --color=info:#73d0ff,prompt:#707a8c,pointer:#cbccc6
- --color=marker:#73d0ff,spinner:#73d0ff,header:#d4bfff
- --border'
-EOF
-mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
-mv /home/user/jsahu2_zshrc /home/user/.zshrc
+  yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+  mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
 }
 
 install_eza
