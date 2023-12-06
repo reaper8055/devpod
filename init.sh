@@ -14,9 +14,11 @@ function install_eza() {
   sudo apt-get install -y eza
 }
 
-function install_os_deps() {
-  [ -f "$(which fzf)" ] && return 0
-  sudo apt-get install -y fzf ripgrep
+function install_pkgs() {
+  yes | sudo apt-get remove --purge fzf
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  yes | ~/.fzf/install
+  sudo apt-get install -y ripgrep
 }
 
 function install_nvim() {
@@ -50,7 +52,7 @@ function init_zshrc_config() {
 
 install_eza
 install_nvim
-install_os_deps
+install_pkgs
 install_starship
 init_starship
 init_zshrc_config
