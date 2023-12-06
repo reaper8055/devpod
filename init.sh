@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-sudo apt-get update && sudo apt-get dist-upgrade -y
+function install_pkgs() {
+  sudo apt-get update && sudo apt-get dist-upgrade -y
+  sudo apt-get install -y ripgrep
+}
 
 function install_eza() {
   [ -f "$(which eza)" ] && return 0
@@ -14,11 +17,10 @@ function install_eza() {
   sudo apt-get install -y eza
 }
 
-function install_pkgs() {
+function install_fzf() {
   yes | sudo apt-get remove --purge fzf
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   yes | ~/.fzf/install
-  sudo apt-get install -y ripgrep
 }
 
 function install_nvim() {
@@ -37,22 +39,23 @@ function install_nvim() {
 
 function install_starship() {
   [ -f "$(which starship)" ] && return 0
-  yes | curl -sS https://starship.rs/install.sh | sh
-}
-
-function init_starship() {
+  curl -sS https://starship.rs/install.sh | sh -s -- -y
   git clone https://github.com/reaper8055/starship-config /home/user/.config/starship/
 }
 
-function init_zshrc_config() {
+function install_zap() {
   yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+}
+
+function init_zshrc() {
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
 }
 
-install_eza
-install_nvim
 install_pkgs
+install_eza
+install_fzf
 install_starship
-init_starship
-init_zshrc_config
+install_nvim
+install_zap
+init_zshrc()
