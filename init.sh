@@ -19,8 +19,8 @@ function install_eza() {
 
 function install_fzf() {
   yes | sudo apt-get remove --purge fzf
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  yes | ~/.fzf/install
+  git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+  yes | $HOME/.fzf/install
 }
 
 function install_nvim() {
