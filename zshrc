@@ -1,6 +1,10 @@
 [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \
   source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
 
+# tmux backspace fix
+bindkey "^H" backward-delete-char
+bindkey "^?" backward-delete-char
+
 #default editor
 export EDITOR=nvim
 
