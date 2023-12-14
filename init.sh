@@ -5,6 +5,16 @@ function install_pkgs() {
   sudo apt-get install -y ripgrep
 }
 
+function install_tmux() {
+  yes | sudo apt-get remove --purge tmux
+  sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
+  curl -LsO https://github.com/tmux/tmux/releases/download/3.3a/tmux-3.3a.tar.gz
+  tar -zxf tmux-3.3a.tar.gz
+  cd tmux-3.3a || exit 1
+  ./configure || exit 1
+  make && sudo make install
+}
+
 function install_eza() {
   [ -f "$(which eza)" ] && return 0
   sudo apt-get update
@@ -60,4 +70,5 @@ install_fzf
 install_starship
 install_nvim
 install_zap
+install_tmux
 init_zshrc
