@@ -89,6 +89,14 @@ function install_nerd_fonts() {
   sudo fc-cache -fv
 }
 
+function cleanup() {
+  yes | sudo apt-get purge --remove libevent-dev ncurses-dev build-essential bison pkg-config
+  cd /home/user
+  yes | rm zshrc_old_*
+  yes | rm tmux-3.3a.tar.gz
+  yes | rm -rf tmux-3.3a
+}
+
 install_pkgs
 install_eza
 install_fzf
@@ -98,3 +106,4 @@ install_zap
 install_tmux
 install_nerd_fonts
 init_zshrc
+cleanup
