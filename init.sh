@@ -58,7 +58,7 @@ function install_zap() {
 }
 
 function init_zshrc() {
-  yes | rm zshrc_old_*
+  rm /home/user/zshrc_old_*
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
   builtin source $HOME/.zshrc
