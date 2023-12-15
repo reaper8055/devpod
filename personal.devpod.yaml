@@ -1,0 +1,9 @@
+---
+schema_version: 0
+flavor: go
+region: india
+shell: zsh
+tasks:
+  - name: init
+    command: curl -sS https://raw.githubusercontent.com/reaper8055/devpod/main/init.sh | bash
+    when: on-create, on-restart
