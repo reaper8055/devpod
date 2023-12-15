@@ -2,7 +2,7 @@
 
 function install_pkgs() {
   sudo apt-get update && sudo apt-get dist-upgrade -y
-  sudo apt-get install -y ripgrep
+  sudo apt-get install -y ripgrep xsel
 }
 
 function install_tmux() {
