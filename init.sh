@@ -58,6 +58,7 @@ function install_zap() {
 }
 
 function init_zshrc() {
+  yes | rm zshrc_old_*
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
   builtin source $HOME/.zshrc
@@ -91,7 +92,6 @@ function install_nerd_fonts() {
 
 function cleanup() {
   cd /home/user
-  yes | rm zshrc_old_*
   yes | rm tmux-3.3a.tar.gz
   yes | rm -rf tmux-3.3a
 }
