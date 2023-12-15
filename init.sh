@@ -64,6 +64,31 @@ function init_zshrc() {
   yes | zap clean
 }
 
+function install_nerd_fonts() {
+  VERSION="v3.0.2"
+  FONTS=("FiraCode" "FiraMono" "Hack" "Inconsolata" "NerdFontsSymbolsOnly" "JetBrainsMono")
+  DIR="nerd-fonts-tmp"
+  mkdir -p ./$DIR
+
+  for FONT in "${FONTS[@]}"; do
+    URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${FONT}.zip"
+    wget -P $DIR $URL -q --show-progress
+  done
+
+  for zipFile in $(ls ./nerd-fonts-tmp/*.zip); do
+    baseName=$(basename -- "$zipFile")
+    # extension="${filename##*.}"
+    fontDirName="${baseName%.*}"
+    [ ! -d "/usr/share/fonts/$fontDirName" ] && sudo mkdir -p /usr/share/fonts/$fontDirName
+    sudo unzip $zipFile -d /usr/share/fonts/$fontDirName
+    [ ! -d "$HOME/.local/share/fonts/$fontDirName" ] && mkdir -p $HOME/.local/share/fonts/$fontDirName
+    unzip -d $zipFile -d $HOME/.local/share/fonts/$fontDirName
+  done
+
+  fc-cache -fv
+  sudo fc-cache -fv
+}
+
 install_pkgs
 install_eza
 install_fzf
@@ -71,4 +96,5 @@ install_starship
 install_nvim
 install_zap
 install_tmux
+install_nerd_fonts
 init_zshrc
