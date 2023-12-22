@@ -13,6 +13,8 @@ function install_tmux() {
   cd tmux-3.3a || exit 1
   ./configure || exit 1
   make && sudo make install
+  [ -d /home/user/.config/tmux ] && rm -rf /home/user/.config/tmux
+  git clone https://github.com/reaper8055/tmux-config /home/user/.config/tmux
 }
 
 function install_eza() {
