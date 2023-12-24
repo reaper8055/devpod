@@ -55,10 +55,9 @@ eval "$(starship init zsh)"
 
 # fzf
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
- --color=fg:#cbccc6,bg:#1f2430,hl:#707a8c
- --color=fg+:#707a8c,bg+:#191e2a,hl+:#ffcc66
- --color=info:#73d0ff,prompt:#707a8c,pointer:#cbccc6
- --color=marker:#73d0ff,spinner:#73d0ff,header:#d4bfff
- --border'
+  --color=dark
+  --color=hl:#5fff87,fg:-1,bg:-1,fg+:-1,bg+:-1,hl+:#ffaf5f
+  --color=info:#af87ff,prompt:#5fff87,pointer:#ff87d7,marker:#ff87d7,spinner:#ff87d7
+  --border'
 
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
