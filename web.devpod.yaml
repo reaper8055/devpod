@@ -1,0 +1,13 @@
+---
+schema_version: 0
+flavor: web
+region: india
+shell: zsh
+tasks:
+  - name: get-init
+    command: |
+      curl -sSL https://raw.githubusercontent.com/reaper8055/devpod/main/init.sh > /home/user/init.sh
+      cd /home/user
+      chmod +x init.sh
+      ./init.sh
+    when: on-create
