@@ -28,13 +28,6 @@ function update-zshrc() {
   builtin source $HOME/.zshrc
 }
 
-# fzf_init
-function fzf_init() {
-  [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && \
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-  [ -f /usr/share/doc/fzf/examples/completion.zsh ] && \
-    source /usr/share/doc/fzf/examples/completion.zsh
-}
 function autosuggestions_init() {
   [ -f "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
     source "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
@@ -44,7 +37,6 @@ function autopair_init() {
     source "$HOME/.local/share/zap/plugins/zsh-autopair/autopair.zsh"
 }
 zvm_after_init_commands+=(
-  fzf_init
   autopair_init
   autosuggestions_init
 )
