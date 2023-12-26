@@ -1,0 +1,139 @@
+# Created by Zap installer
+[ -f "$HOME/.local/share/zap/zap.zsh" ] && \
+  source "$HOME/.local/share/zap/zap.zsh"
+
+export PATH="/usr/local/opt/php@8.2/bin:$PATH"
+export PATH="/usr/local/opt/php@8.2/sbin:$PATH"
+
+# tmux backspace fix
+bindkey "^H" backward-delete-char
+bindkey "^?" backward-delete-char
+
+# default editor
+export EDITOR=nvim
+
+# Plugins
+plug "hlissner/zsh-autopair"
+plug "zsh-users/zsh-autosuggestions"
+plug "zsh-users/zsh-syntax-highlighting"
+plug "jeffreytse/zsh-vi-mode"
+plug "zap-zsh/supercharge"
+plug "zap-zsh/exa" # this plugin needs to be after zap-zsh/supercharge as per https://github.com/zap-zsh/exa/issues/3
+plug "Aloxaf/fzf-tab"
+plug "zap-zsh/fzf"
+plug "lljbash/zsh-renew-tmux-env"
+
+# Aliases
+alias n="nvim"
+alias .="builtin source $HOME/.zshrc"
+alias zshrc="nvim $HOME/.zshrc"
+alias kc="nvim $HOME/.config/kitty/kitty.conf"
+alias wez="nvim $HOME/.config/wezterm/wezterm.lua"
+alias tc="nvim $HOME/.config/tmux/tmux.conf"
+alias git-remote-url="git remote set-url origin"
+alias nix-search="nix-env -qaP"
+alias c2c="pbcopy <"
+alias path="echo $PATH | sed -e 's/:/\n/g'"
+alias temp='sudo powermetrics --samplers smc | grep -i "CPU die temperature"'
+# alias tmux="tmux -u"
+
+function update-zshrc() {
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc-mac > $HOME/.zshrc
+  builtin source $HOME/.zshrc
+}
+
+function install-starship() {
+  curl -sS https://starship.rs/install.sh | sh
+}
+
+function install-nix() {
+  sh <(curl -L https://nixos.org/nix/install) --daemon
+}
+
+function zap-init() {
+  zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) \
+    --branch release-v1
+}
+
+function gen-nix-shell() {
+cat > shell.nix <<EOF
+{ pkgs ? import <nixpkgs> {} }:
+
+with pkgs;
+
+mkShell {
+  buildInputs = [
+    go
+    zsh
+    gotools
+    gopls
+    go-outline
+    gocode
+    gopkgs
+    gocode-gomod
+    godef
+    golint
+    fnm
+    nodejs
+    yarn
+    rnix-lsp
+    fd
+    golangci-lint
+  ];
+  shellHook = ''
+    export GIT_CONFIG_NOSYSTEM=true
+    export GIT_CONFIG_SYSTEM="$HOME/Projects/configs/github/github_global"
+    export GIT_CONFIG_GLOBAL="$HOME/Projects/configs/github/github_global"
+  '';
+}
+EOF
+}
+
+function gen-envrc() {
+cat > .envrc <<EOF
+use nix shell.nix
+EOF
+}
+
+function nix-init() {
+  gen-nix-shell
+  gen-envrc
+  direnv allow
+}
+
+function gogh() {
+  bash -c "$(wget -qO- https://git.io/vQgMr)"
+}
+
+function autosuggestions_init() {
+  [ -f "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+    source "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+}
+function autopair_init() {
+  [ -f "$HOME/.local/share/zap/plugins/zsh-autopair/autopair.zsh" ] && \
+    source "$HOME/.local/share/zap/plugins/zsh-autopair/autopair.zsh"
+}
+zvm_after_init_commands+=(
+  autopair_init
+  autosuggestions_init
+)
+
+# starship.rs
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+eval "$(starship init zsh)"
+
+# direnv hook
+eval "$(direnv hook zsh)"
+
+# fzf
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+ --color=dark
+ --color=hl:#5fff87,fg:-1,bg:-1,fg+:-1,bg+:-1,hl+:#ffaf5f
+ --color=info:#af87ff,prompt:#5fff87,pointer:#ff87d7,marker:#ff87d7,spinner:#ff87d7
+ --border'
+
+# fnm
+export PATH="$HOME/Library/Application\ Support/fnm:$PATH"
+eval "`fnm env`"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
