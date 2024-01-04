@@ -52,4 +52,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=info:#af87ff,prompt:#5fff87,pointer:#ff87d7,marker:#ff87d7,spinner:#ff87d7
   --border'
 
+# fzf-tab config
+zstyle ':fzf-tab:*' fzf-min-height 10
+
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
