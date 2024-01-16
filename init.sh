@@ -2,7 +2,18 @@
 
 function install_pkgs() {
   sudo apt-get update && sudo apt-get dist-upgrade -y
-  sudo apt-get install -y ripgrep xsel
+  sudo apt-get install -y xsel fd-find
+}
+
+function install_stylua() {
+  wget -q https://github.com/JohnnyMorganz/StyLua/releases/download/v0.19.1/stylua-linux-x86_64.zip
+  sudo unzip -d stylua-linux-x86_64 /usr/local/bin
+}
+
+function install_rg() {
+  cd /home/user
+  curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+  sudo apt install ./ripgrep_13.0.0_amd64.deb
 }
 
 function install_tmux() {
@@ -31,8 +42,8 @@ function install_eza() {
 
 function install_fzf() {
   yes | sudo apt-get remove --purge fzf
-  git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-  yes | $HOME/.fzf/install
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  yes | "$HOME/.fzf/install"
 }
 
 function install_nvim() {
@@ -62,8 +73,8 @@ function install_zap() {
 function init_zshrc() {
   rm /home/user/zshrc_old_*
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
-  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
-  builtin source $HOME/.zshrc
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > "$HOME/.zshrc"
+  builtin source "$HOME/.zshrc"
   yes | zap clean
 }
 
@@ -75,17 +86,17 @@ function install_nerd_fonts() {
 
   for FONT in "${FONTS[@]}"; do
     URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${FONT}.zip"
-    wget -P $DIR $URL -q --show-progress
+    wget -P "$DIR" "$URL" -q --show-progress
   done
 
-  for zipFile in $(ls ./nerd-fonts-tmp/*.zip); do
+  for zipFile in ./nerd-fonts-tmp/*.zip; do
     baseName=$(basename -- "$zipFile")
     # extension="${filename##*.}"
     fontDirName="${baseName%.*}"
-    [ ! -d "/usr/share/fonts/$fontDirName" ] && sudo mkdir -p /usr/share/fonts/$fontDirName
-    sudo unzip $zipFile -d /usr/share/fonts/$fontDirName
-    [ ! -d "$HOME/.local/share/fonts/$fontDirName" ] && mkdir -p $HOME/.local/share/fonts/$fontDirName
-    unzip -d $zipFile -d $HOME/.local/share/fonts/$fontDirName
+    [ ! -d "/usr/share/fonts/$fontDirName" ] && sudo mkdir -p "/usr/share/fonts/$fontDirName"
+    sudo unzip "$zipFile" -d "/usr/share/fonts/$fontDirName"
+    [ ! -d "$HOME/.local/share/fonts/$fontDirName" ] && mkdir -p "$HOME/.local/share/fonts/$fontDirName"
+    unzip "$zipFile" -d "$HOME/.local/share/fonts/$fontDirName"
   done
 
   fc-cache -fv
@@ -94,11 +105,13 @@ function install_nerd_fonts() {
 
 function cleanup() {
   cd /home/user
-  yes | rm tmux-3.3a.tar.gz
-  yes | rm -rf tmux-3.3a
+  rm tmux-3.3a.tar.gz
+  rm -rf tmux-3.3a
 }
 
 install_pkgs
+install_rg
+install_stylua
 install_eza
 install_fzf
 install_starship
