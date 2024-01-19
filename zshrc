@@ -22,6 +22,7 @@ plug "lljbash/zsh-renew-tmux-env"
 # Aliases
 alias .="builtin source $HOME/.zshrc"
 alias zshrc="nvim $HOME/.zshrc"
+alias grep="grep --color=always"
 
 function update-zshrc() {
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
