@@ -35,6 +35,7 @@ alias nix-search="nix-env -qaP"
 alias c2c="pbcopy <"
 alias path="echo $PATH | sed -e 's/:/\n/g'"
 alias temp='sudo powermetrics --samplers smc | grep -i "CPU die temperature"'
+alias grep="grep --color=always"
 # alias tmux="tmux -u"
 
 function update-zshrc() {
