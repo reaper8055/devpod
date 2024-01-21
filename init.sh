@@ -78,6 +78,11 @@ function init_zshrc() {
   yes | zap clean
 }
 
+function init_envrc_local() {
+  [ -f "$HOME/go-code/.envrc.local" ] && mv "$HOME/go-code/.envrc.local" "$HOME/envrc.local_$(date +%s).bak"
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/envrc.local > "$HOME/go-code/.envrc.local"
+}
+
 function install_nerd_fonts() {
   VERSION="v3.0.2"
   FONTS=("FiraCode" "FiraMono" "Hack" "Inconsolata" "NerdFontsSymbolsOnly" "JetBrainsMono")
