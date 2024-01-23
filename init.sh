@@ -79,8 +79,10 @@ function init_zshrc() {
 }
 
 function init_envrc_local() {
+  if [[ $(hostname) = "jsahu2-go" ]]; then
   [ -f "$HOME/go-code/.envrc.local" ] && mv "$HOME/go-code/.envrc.local" "$HOME/envrc.local_$(date +%s).bak"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/envrc.local > "$HOME/go-code/.envrc.local"
+  fi
 }
 
 function install_nerd_fonts() {
