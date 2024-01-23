@@ -67,7 +67,8 @@ function install_starship() {
 }
 
 function install_zap() {
-  yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+  [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \
+    yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
 }
 
 function init_zshrc() {
