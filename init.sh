@@ -7,13 +7,13 @@ function install_pkgs() {
 
 function install_stylua() {
   wget -q https://github.com/JohnnyMorganz/StyLua/releases/download/v0.19.1/stylua-linux-x86_64.zip
-  sudo unzip -d stylua-linux-x86_64 /usr/local/bin
+  sudo unzip -d stylua-linux-x86_64.zip /usr/local/bin && rm "$HOME/stylua-linux-x86_64.zip"
 }
 
 function install_rg() {
   cd /home/user
   curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-  sudo apt install ./ripgrep_13.0.0_amd64.deb
+  sudo apt install ./ripgrep_13.0.0_amd64.deb && rm "$HOME/ripgrep_13.0.0_amd64.deb"
 }
 
 function install_tmux() {
@@ -34,7 +34,7 @@ function install_eza() {
   sudo apt-get install -y gpg
   sudo mkdir -p /etc/apt/keyrings
   wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-  echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+  echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
   sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
   sudo apt-get update
   sudo apt-get install -y eza
@@ -84,28 +84,34 @@ function init_envrc_local() {
 }
 
 function install_nerd_fonts() {
-  VERSION="v3.0.2"
+  VERSION="v3.1.1"
   FONTS=("FiraCode" "FiraMono" "Hack" "Inconsolata" "NerdFontsSymbolsOnly" "JetBrainsMono")
   DIR="nerd-fonts-tmp"
   mkdir -p ./$DIR
 
   for FONT in "${FONTS[@]}"; do
     URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${FONT}.zip"
-    wget -P "$DIR" "$URL" -q --show-progress
+    wget -P "$DIR" "$URL" -q
   done
 
   for zipFile in ./nerd-fonts-tmp/*.zip; do
     baseName=$(basename -- "$zipFile")
     # extension="${filename##*.}"
     fontDirName="${baseName%.*}"
+    [ -d "/usr/share/fonts/$fontDirName" ] && sudo rm -rf "/usr/share/fonts/$fontDirName"
     [ ! -d "/usr/share/fonts/$fontDirName" ] && sudo mkdir -p "/usr/share/fonts/$fontDirName"
     sudo unzip "$zipFile" -d "/usr/share/fonts/$fontDirName"
+    [ -d "$HOME/.local/share/fonts/$fontDirName" ] && rm -rf "$HOME/.local/share/fonts/$fontDirName"
     [ ! -d "$HOME/.local/share/fonts/$fontDirName" ] && mkdir -p "$HOME/.local/share/fonts/$fontDirName"
     unzip "$zipFile" -d "$HOME/.local/share/fonts/$fontDirName"
   done
 
   fc-cache -fv
   sudo fc-cache -fv
+}
+
+function update-initsh() {
+  curl -sSL https://raw.githubusercontent.com/reaper8055/devpod/main/init.sh > "$HOME/init.sh"
 }
 
 function cleanup() {
@@ -124,5 +130,6 @@ install_nvim
 install_zap
 install_tmux
 install_nerd_fonts
+init_envrc_local
 init_zshrc
 cleanup
