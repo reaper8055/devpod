@@ -6,17 +6,22 @@ function install_pkgs() {
 }
 
 function install_stylua() {
+  [ -f "$(which stylua)" ] && return 0
   wget -q https://github.com/JohnnyMorganz/StyLua/releases/download/v0.19.1/stylua-linux-x86_64.zip
   sudo unzip -d stylua-linux-x86_64.zip /usr/local/bin && rm "$HOME/stylua-linux-x86_64.zip"
 }
 
 function install_rg() {
-  cd /home/user
+  [ -f "$(which rg)" ] && return 0
+  cd /home/user || return 1
+  RG_VERSION="$(rg --version | awk 'NR==1 {print $2}')"
+  [[ "$RG_VERSION" = "13.0.0" ]] && return 0
   curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   sudo apt install ./ripgrep_13.0.0_amd64.deb && rm "$HOME/ripgrep_13.0.0_amd64.deb"
 }
 
 function install_tmux() {
+  [[ "$(tmux -V)" = "tmux 3.3a" ]] && return 0
   yes | sudo apt-get remove --purge tmux
   sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
   curl -LsO https://github.com/tmux/tmux/releases/download/3.3a/tmux-3.3a.tar.gz
@@ -41,12 +46,16 @@ function install_eza() {
 }
 
 function install_fzf() {
+  FZF_VERSION="$(fzf --version | awk '{print $1}')"
+  [[ "$FZF_VERSION" = "0.44.1" ]] && return 0
   yes | sudo apt-get remove --purge fzf
   git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
   yes | "$HOME/.fzf/install"
 }
 
 function install_nvim() {
+  NVIM_VERSION="$(nvim -v | awk 'NR==1 {print $2}')"
+  [[ "$NVIM_VERSION" = "v0.9.5" ]] && return 0
   yes | sudo apt-get remove --purge neovim
   sudo apt-get install -y ninja-build gettext cmake unzip curl
   [ -d /home/user/neovim ] && rm -rf /home/user/neovim
@@ -67,8 +76,8 @@ function install_starship() {
 }
 
 function install_zap() {
-  [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \
-    yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+  [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && return 0
+  yes | zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
 }
 
 function init_zshrc() {
@@ -90,7 +99,7 @@ function install_nerd_fonts() {
   VERSION="v3.1.1"
   FONTS=("FiraCode" "FiraMono" "Hack" "Inconsolata" "NerdFontsSymbolsOnly" "JetBrainsMono")
   DIR="nerd-fonts-tmp"
-  mkdir -p ./$DIR
+  mkdir "$HOME/$DIR"
 
   for FONT in "${FONTS[@]}"; do
     URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${FONT}.zip"
