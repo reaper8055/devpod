@@ -29,6 +29,10 @@ function update-zshrc() {
   builtin source $HOME/.zshrc
 }
 
+function get-initsh() {
+   curl -sSL https://raw.githubusercontent.com/reaper8055/devpod/main/init.sh > "$HOME/init.sh"
+}
+
 function autosuggestions_init() {
   [ -f "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
     source "$HOME/.local/share/zap/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
