@@ -1,5 +1,11 @@
-[ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ] && \
+if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh" ]; then
   source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
+else
+  zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
+  builtin source $HOME/.zshrc
+  zap clean
+fi
 
 # tmux backspace fix
 bindkey "^H" backward-delete-char
