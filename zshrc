@@ -23,7 +23,6 @@ plug "zap-zsh/supercharge"
 plug "zap-zsh/exa" # this plugin needs to be after zap-zsh/supercharge as per https://github.com/zap-zsh/exa/issues/3
 plug "Aloxaf/fzf-tab"
 plug "zap-zsh/fzf"
-plug "lljbash/zsh-renew-tmux-env"
 
 # Aliases
 alias .="builtin source $HOME/.zshrc"
