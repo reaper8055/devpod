@@ -8,7 +8,7 @@ function install_pkgs() {
 function install_stylua() {
   [ -f "$(which stylua)" ] && return 0
   wget -q https://github.com/JohnnyMorganz/StyLua/releases/download/v0.19.1/stylua-linux-x86_64.zip
-  sudo unzip -d stylua-linux-x86_64.zip /usr/local/bin && rm "$HOME/stylua-linux-x86_64.zip"
+  sudo unzip -d stylua-linux-x86_64.zip /usr/local/bin && rm "$HOME/stylua-linux-x86_64.zip*"
 }
 
 function install_rg() {
