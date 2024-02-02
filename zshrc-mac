@@ -1,9 +1,11 @@
 # Created by Zap installer
-[ -f "$HOME/.local/share/zap/zap.zsh" ] && \
+if [ -f "$HOME/.local/share/zap/zap.zsh" ]; then
   source "$HOME/.local/share/zap/zap.zsh"
-
-export PATH="/usr/local/opt/php@8.2/bin:$PATH"
-export PATH="/usr/local/opt/php@8.2/sbin:$PATH"
+else
+  zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
+  builtin source $HOME/.zshrc
+fi
 
 # tmux backspace fix
 bindkey "^H" backward-delete-char
@@ -21,7 +23,6 @@ plug "zap-zsh/supercharge"
 plug "zap-zsh/exa" # this plugin needs to be after zap-zsh/supercharge as per https://github.com/zap-zsh/exa/issues/3
 plug "Aloxaf/fzf-tab"
 plug "zap-zsh/fzf"
-plug "lljbash/zsh-renew-tmux-env"
 
 # Aliases
 alias n="nvim"
