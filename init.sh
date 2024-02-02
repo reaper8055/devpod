@@ -9,7 +9,7 @@ function install_pkgs() {
 function install_stylua() {
   [ -f "$(which stylua)" ] && return 0
   wget -q https://github.com/JohnnyMorganz/StyLua/releases/download/v0.19.1/stylua-linux-x86_64.zip
-  sudo unzip -d stylua-linux-x86_64.zip /usr/local/bin && return 0
+  sudo unzip stylua-linux-x86_64.zip -d /usr/local/bin && return 0
 }
 
 function install_rg() {
@@ -86,7 +86,6 @@ function init_zshrc() {
   mv /home/user/.zshrc /home/user/zshrc_old_"$(date +%s)"
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > "$HOME/.zshrc"
   builtin source "$HOME/.zshrc"
-  yes | zap clean
 }
 
 function init_envrc_local() {
@@ -100,7 +99,7 @@ function install_nerd_fonts() {
   VERSION="v3.1.1"
   FONTS=("FiraCode" "FiraMono" "Hack" "Inconsolata" "NerdFontsSymbolsOnly" "JetBrainsMono")
   DIR="nerd-fonts-tmp"
-  mkdir "$HOME/$DIR"
+  [ -d "$HOME/$DIR" ] && mkdir "$HOME/$DIR" || find /home/user -name "$DIR" -type d -exec -rm -rf {} +
 
   for FONT in "${FONTS[@]}"; do
     URL="https://github.com/ryanoasis/nerd-fonts/releases/download/${VERSION}/${FONT}.zip"
@@ -136,9 +135,9 @@ function cleanup() {
 
 if [ -f "$HOME/install_pkgs_last_run.txt" ]; then
   LAST_RUN=$(cat "$HOME/install_pkgs_last_run.txt")
-  THREE_DAYS_AGO=$(date -d '3 days ago' + %Y%m%d)
+  THREE_DAYS_AGO=$(date -d '3 days ago' +%Y%m%d)
   if [ "$(date -d "$LAST_RUN" +%Y%m%d)" -ge "$THREE_DAYS_AGO" ]; then
-    print "function has run in last 3 days... skipping\n"
+    printf "install_pkgs() has run in last 3 days...\n skipping\n"
   else
     install_pkgs
   fi
