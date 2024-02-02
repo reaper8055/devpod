@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function install_pkgs() {
+  date +%Y-%m-%d > "$HOME/${FUNCNAME}_last_run.txt"
   sudo apt-get update && sudo apt-get dist-upgrade -y
   sudo apt-get install -y xsel fd-find
 }
@@ -133,7 +134,18 @@ function cleanup() {
   find /home/user -name "nerd-fonts-tmp" -type d -exec rm -rf {} +
 }
 
-install_pkgs
+if [ -f "$HOME/install_pkgs_last_run.txt" ]; then
+  LAST_RUN=$(cat "$HOME/install_pkgs_last_run.txt")
+  THREE_DAYS_AGO=$(date -d '3 days ago' + %Y%m%d)
+  if [ "$(date -d "$LAST_RUN" +%Y%m%d)" -ge "$THREE_DAYS_AGO" ]; then
+    print "function has run in last 3 days... skipping\n"
+  else
+    install_pkgs
+  fi
+else
+  install_pkgs
+fi
+
 install_rg
 install_stylua
 install_eza
