@@ -44,7 +44,7 @@ function preexec() {
 
 
 function update-zshrc() {
-  curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
+  curl -sL https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
   builtin source $HOME/.zshrc
 }
 
