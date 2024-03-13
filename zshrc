@@ -29,6 +29,20 @@ alias .="builtin source $HOME/.zshrc"
 alias zshrc="nvim $HOME/.zshrc"
 alias grep="grep --color=always"
 
+if [ -n "$TMUX" ]; then
+  function refresh() {
+    export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
+    export $(tmux show-environment | grep "^DISPLAY")
+  }
+else
+  function refresh() { }
+fi
+
+function preexec() {
+  refresh
+}
+
+
 function update-zshrc() {
   curl -s https://raw.githubusercontent.com/reaper8055/devpod/main/zshrc > $HOME/.zshrc
   builtin source $HOME/.zshrc
